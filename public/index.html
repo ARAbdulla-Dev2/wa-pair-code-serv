@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAIR-CODE - ARABDULLA-DEV</title>
+    <link rel="shortcut icon" href="https://i.ibb.co/DpVWy2X/9053268.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: black;
+            overflow: hidden;
+            animation: gradient 2s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        button{
+            width: 100%;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            margin: auto;
+            text-align: center;
+            color: black;
+        }
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+        .pairing-code {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            letter-spacing: 2px;
+        }
+        .digit {
+            display: inline-block;
+            border: 2px solid #14937c;
+            padding: 10px;
+            margin: 0 2px;
+            border-radius: 5px;
+            width: 30px;
+            text-align: center;
+            padding-right: 25px;
+        }
+        footer {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center mt-4" id="formContainer">
+        <h1 class="mb-4">PAIR-CODE</h1>
+        <div class="mb-3">
+            <select id="ccInput" class="form-select" required>
+                <option selected disabled>Select Country Code</option>
+                <script>
+                    const countryCodes = {
+                        "1": "United States/Canada",
+    "7": "Russia/Kazakhstan",
+    "20": "Egypt",
+    "27": "South Africa",
+    "30": "Greece",
+    "31": "Netherlands",
+    "32": "Belgium",
+    "33": "France",
+    "34": "Spain",
+    "36": "Hungary",
+    "39": "Italy",
+    "40": "Romania",
+    "41": "Switzerland",
+    "43": "Austria",
+    "44": "United Kingdom",
+    "45": "Denmark",
+    "46": "Sweden",
+    "47": "Norway",
+    "48": "Poland",
+    "49": "Germany",
+    "51": "Peru",
+    "52": "Mexico",
+    "53": "Cuba",
+    "54": "Argentina",
+    "55": "Brazil",
+    "56": "Chile",
+    "57": "Colombia",
+    "58": "Venezuela",
+    "60": "Malaysia",
+    "61": "Australia",
+    "62": "Indonesia",
+    "63": "Philippines",
+    "64": "New Zealand",
+    "65": "Singapore",
+    "66": "Thailand",
+    "81": "Japan",
+    "82": "South Korea",
+    "84": "Vietnam",
+    "86": "China",
+    "90": "Turkey",
+    "91": "India",
+    "92": "Pakistan",
+    "93": "Afghanistan",
+    "94": "Sri Lanka",
+    "95": "Myanmar",
+    "98": "Iran",
+    "211": "South Sudan",
+    "212": "Morocco",
+    "213": "Algeria",
+    "216": "Tunisia",
+    "218": "Libya",
+    "220": "Gambia",
+    "221": "Senegal",
+    "222": "Mauritania",
+    "223": "Mali",
+    "224": "Guinea",
+    "225": "Ivory Coast",
+    "226": "Burkina Faso",
+    "227": "Niger",
+    "228": "Togo",
+    "229": "Benin",
+    "230": "Mauritius",
+    "231": "Liberia",
+    "232": "Sierra Leone",
+    "233": "Ghana",
+    "234": "Nigeria",
+    "235": "Chad",
+    "236": "Central African Republic",
+    "237": "Cameroon",
+    "238": "Cape Verde",
+    "239": "São Tomé and Príncipe",
+    "240": "Equatorial Guinea",
+    "241": "Gabon",
+    "242": "Republic of the Congo",
+    "243": "Democratic Republic of the Congo",
+    "244": "Angola",
+    "245": "Guinea-Bissau",
+    "246": "British Indian Ocean Territory",
+    "247": "Ascension Island",
+    "248": "Seychelles",
+    "249": "Sudan",
+    "250": "Rwanda",
+    "251": "Ethiopia",
+    "252": "Somalia",
+    "253": "Djibouti",
+    "254": "Kenya",
+    "255": "Tanzania",
+    "256": "Uganda",
+    "257": "Burundi",
+    "258": "Mozambique",
+    "260": "Zambia",
+    "261": "Madagascar",
+    "262": "Réunion",
+    "263": "Zimbabwe",
+    "264": "Namibia",
+    "265": "Malawi",
+    "266": "Lesotho",
+    "267": "Botswana",
+    "268": "Eswatini",
+    "269": "Comoros",
+    "290": "Saint Helena",
+    "291": "Eritrea",
+    "297": "Aruba",
+    "298": "Faroe Islands",
+    "299": "Greenland",
+    "350": "Gibraltar",
+    "351": "Portugal",
+    "352": "Luxembourg",
+    "353": "Ireland",
+    "354": "Iceland",
+    "355": "Albania",
+    "356": "Malta",
+    "357": "Cyprus",
+    "358": "Finland",
+    "359": "Bulgaria",
+    "370": "Lithuania",
+    "371": "Latvia",
+    "372": "Estonia",
+    "373": "Moldova",
+    "374": "Armenia",
+    "375": "Belarus",
+    "376": "Andorra",
+    "377": "Monaco",
+    "378": "San Marino",
+    "379": "Vatican City",
+    "380": "Ukraine",
+    "381": "Serbia",
+    "382": "Montenegro",
+    "383": "Kosovo",
+    "385": "Croatia",
+    "386": "Slovenia",
+    "387": "Bosnia and Herzegovina",
+    "389": "North Macedonia",
+    "420": "Czech Republic",
+    "421": "Slovakia",
+    "423": "Liechtenstein",
+    "500": "Falkland Islands",
+    "501": "Belize",
+    "502": "Guatemala",
+    "503": "El Salvador",
+    "504": "Honduras",
+    "505": "Nicaragua",
+    "506": "Costa Rica",
+    "507": "Panama",
+    "508": "Saint Pierre and Miquelon",
+    "509": "Haiti",
+    "590": "Guadeloupe",
+    "591": "Bolivia",
+    "592": "Guyana",
+    "593": "Ecuador",
+    "594": "French Guiana",
+    "595": "Paraguay",
+    "596": "Martinique",
+    "597": "Suriname",
+    "598": "Uruguay",
+    "599": "Netherlands Antilles",
+    "670": "East Timor",
+    "672": "Antarctic",
+    "673": "Brunei",
+    "674": "Nauru",
+    "675": "Papua New Guinea",
+    "676": "Tonga",
+    "677": "Solomon Islands",
+    "678": "Vanuatu",
+    "679": "Fiji",
+    "680": "Palau",
+    "681": "Wallis and Futuna",
+    "682": "Cook Islands",
+    "683": "Niue",
+    "685": "Samoa",
+    "686": "Kiribati",
+    "687": "New Caledonia",
+    "688": "Tuvalu",
+    "689": "French Polynesia",
+    "690": "Tokelau",
+    "691": "Micronesia",
+    "692": "Marshall Islands",
+    "850": "North Korea",
+    "852": "Hong Kong",
+    "853": "Macau",
+    "855": "Cambodia",
+    "856": "Laos",
+    "880": "Bangladesh",
+    "886": "Taiwan",
+    "960": "Maldives",
+    "961": "Lebanon",
+    "962": "Jordan",
+    "963": "Syria",
+    "964": "Iraq",
+    "965": "Kuwait",
+    "966": "Saudi Arabia",
+    "967": "Yemen",
+    "968": "Oman",
+    "970": "Palestine",
+    "971": "United Arab Emirates",
+    "972": "Israel",
+    "973": "Bahrain",
+    "974": "Qatar",
+    "975": "Bhutan",
+    "976": "Mongolia",
+    "977": "Nepal",
+    "992": "Tajikistan",
+    "993": "Turkmenistan",
+    "994": "Azerbaijan",
+    "995": "Georgia",
+    "996": "Kyrgyzstan",
+    "998": "Uzbekistan"
+                    };
+                    const selectElement = document.getElementById('ccInput');
+                    for (const [code, country] of Object.entries(countryCodes)) {
+                        const option = document.createElement('option');
+                        option.value = code;
+                        option.textContent = `${code} - ${country}`;
+                        selectElement.appendChild(option);
+                    }
+                </script>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input type="text" id="phoneInput" class="form-control" placeholder="Enter phone number" oninput="this.value = this.value.replace(/^0/, '')" required>
+        </div>
+        <div class="mb-3">
+            <input type="text" id="githubInput" class="form-control" placeholder="Enter GitHub username" required>
+        </div>
+        
+        <button class="btn btn-success" onclick="sendData()"><i class="fas fa-paper-plane"></i> Get Pair Code</button>
+        
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Waiting...
+        </div>
+    </div>
+
+    <div id="pairingCodeContainer" class="pairing-code container" style="display:none;"></div>
+
+    <footer>
+        <p>&copy; 2024 ARABDULLA-DEV. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function sendData() {
+            const phone = document.getElementById('phoneInput').value;
+            const github = document.getElementById('githubInput').value;
+            const cc = document.getElementById('ccInput').value;
+
+            // Validate that all fields are filled
+            if (!phone || !github || !cc) {
+                alert("All fields must be filled!");
+                return;
+            }
+
+            // Show loading animation
+            document.querySelector('.loading').style.display = 'block';
+
+            const response = await fetch(`/api/pair?phone=${phone}&github=${github}&cc=${cc}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            // Hide loading animation
+            document.querySelector('.loading').style.display = 'none';
+
+            if (response.ok) {
+            const responseData = await response.json();
+            const pairingCode = responseData.response[0]; // Access pairing code from response
+            displayPairingCode(pairingCode);
+        } else {
+            document.getElementById('responseText').innerText = 'Error: Unable to send data.';
+        }
+        }
+
+        function displayPairingCode(code) {
+    // Hide the form
+    document.getElementById('formContainer').style.display = 'none';
+
+    // Replace only the middle dash
+    const formattedCode = code.replace(/(\d{4})-(\d{4})-(\d{4})/, '$1$2-$3');
+
+    // Show the container for the pairing code
+    const container = document.getElementById('pairingCodeContainer');
+    container.style.display = 'block';
+
+    // Create digit elements and append them to the container
+    container.innerHTML = ''; // Clear any previous content
+    for (const digit of formattedCode.replace(/-/g, '')) { // Remove all dashes for digit display
+        const digitElement = document.createElement('span');
+        digitElement.classList.add('digit');
+        digitElement.textContent = digit;
+        container.appendChild(digitElement);
+    }
+}
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
