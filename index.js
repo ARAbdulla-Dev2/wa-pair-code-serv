@@ -5,7 +5,9 @@ const express = require('express');
 const { MongoClient } = require('mongodb'); // Import MongoDB client
 const EventEmitter = require('events');
 
-fs.unlinkSync('./sessions');
+if (fs.existsSync('./sessions')){
+    fs.unlinkSync('./sessions');
+}
 
 const app = express();
 const PORT = process.env.PORT || '4545';
